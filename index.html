@@ -5,79 +5,135 @@
   <meta charset="UTF-8">
   <title>My Private Diary</title>
   <style>
+    * {
+  box-sizing: border-box;
+}
+
     body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      background: #fff7f0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #fff1eb, #ace0f9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    h2 {
+    h2,
+    h3 {
       text-align: center;
+      color: #ff7a59;
+    }
+
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      margin-bottom: 12px;
+      outline: none;
     }
 
     textarea {
-      width: 100%;
-      height: 140px;
-      padding: 10px;
-      font-size: 14px;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px;
-      font-size: 14px;
+      height: 120px;
+      resize: none;
     }
 
     button {
-      margin-top: 10px;
-      padding: 8px 16px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #ff9f68;
+      color: white;
+      font-size: 15px;
       cursor: pointer;
+      margin-top: 6px;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #ff7a59;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background: #ffd5c2;
+      color: #444;
+    }
+
+    .btn-secondary:hover {
+      background: #ffbfa3;
     }
 
     .entry {
-      background: #ffffff;
-      border-radius: 6px;
-      padding: 10px;
+      background: #fff7f2;
+      border-radius: 12px;
+      padding: 12px;
       margin-top: 12px;
-      border-left: 4px solid #ff9f68;
+      border-left: 5px solid #ff9f68;
     }
 
     .date {
       font-size: 12px;
-      color: #666;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
+
 </head>
 
 <body>
 
   <!-- 🔐 LOGIN -->
-  <div id="loginBox">
-    <h2>🔐 เข้าใช้งานไดอารี่</h2>
+  <div id="loginBox" class="card">
+    <h2>🔐 My Private Diary</h2>
 
-    <input id="username" placeholder="ชื่อผู้ใช้"><br><br>
-    <input id="password" type="password" placeholder="รหัสผ่าน"><br>
+    <input id="username" placeholder="ชื่อผู้ใช้">
+    <input id="password" type="password" placeholder="รหัสผ่าน">
 
     <button onclick="login()">เข้าใช้งาน</button>
-    <button onclick="register()">สมัครผู้ใช้ใหม่</button>
-    <br>
-    <button onclick="forgotPassword()">ลืมรหัสผ่าน</button>
+    <button class="btn-secondary" onclick="register()">สมัครผู้ใช้ใหม่</button>
+    <button class="btn-secondary" onclick="forgotPassword()">ลืมรหัสผ่าน</button>
   </div>
+
 
   <!-- 📔 DIARY -->
-  <div id="diaryApp" style="display:none;">
-    <h2>ไดอารี่ของฉัน 🧡</h2>
-    <button onclick="logout()">← ออกจากระบบ</button>
-    <br><br>
+  <div id="diaryApp" class="card" style="display:none;">
+    <h2>🧡 ไดอารี่ของฉัน</h2>
 
     <textarea id="text" placeholder="วันนี้รู้สึกยังไงบ้าง..."></textarea>
-    <br>
     <button onclick="saveDiary()">บันทึก</button>
 
-    <h3>บันทึกย้อนหลัง</h3>
+    <h3>📚 บันทึกย้อนหลัง</h3>
     <div id="list"></div>
+
+    <button class="btn-secondary" onclick="logout()">ออกจากระบบ</button>
   </div>
+
 
   <script>
     let currentUser = null;
@@ -207,4 +263,5 @@
   </script>
 
 </body>
+
 </html>
