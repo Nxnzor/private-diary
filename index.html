@@ -4,105 +4,69 @@
 <head>
   <meta charset="UTF-8">
   <title>My Private Diary</title>
-  <style>
-    * {
-  box-sizing: border-box;
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #fff1eb, #ace0f9);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #fff1eb, #ace0f9);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+.card {
+  background: #fff;
+  max-width: 420px;
+  width: 100%;
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
 
-    h2,
-    h3 {
-      text-align: center;
-      color: #ff7a59;
-    }
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
 
-    .card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 420px;
-      padding: 24px;
-      border-radius: 18px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 0.6s ease;
-    }
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #ff9f68;
+  color: #fff;
+  margin-top: 6px;
+  cursor: pointer;
+}
 
-    input,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      margin-bottom: 12px;
-      outline: none;
-    }
+.btn-secondary {
+  background: #ffd5c2;
+  color: #444;
+}
 
-    textarea {
-      height: 120px;
-      resize: none;
-    }
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      background: #ff9f68;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 6px;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #ff7a59;
-      transform: scale(1.02);
-    }
-
-    .btn-secondary {
-      background: #ffd5c2;
-      color: #444;
-    }
-
-    .btn-secondary:hover {
-      background: #ffbfa3;
-    }
-
-    .entry {
-      background: #fff7f2;
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 12px;
-      border-left: 5px solid #ff9f68;
-    }
-
-    .date {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 6px;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  max-width: 360px;
+  width: 90%;
+}
+</style>
 
 </head>
 
@@ -118,8 +82,9 @@
     <button onclick="login()">เข้าใช้งาน</button>
     <button class="btn-secondary" onclick="register()">สมัครผู้ใช้ใหม่</button>
     <button class="btn-secondary" onclick="forgotPassword()">ลืมรหัสผ่าน</button>
-  </div>
+    <button class="btn-secondary" onclick="openHelp()">ℹ วิธีใช้งาน</button>
 
+  </div>
 
   <!-- 📔 DIARY -->
   <div id="diaryApp" class="card" style="display:none;">
@@ -134,11 +99,33 @@
     <button class="btn-secondary" onclick="logout()">ออกจากระบบ</button>
   </div>
 
+  <!-- 📘 HELP MODAL -->
+  <div id="helpModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>📘 วิธีใช้งาน My Private Diary</h3>
+      <ol>
+        <li>สมัครผู้ใช้ใหม่ก่อนเข้าใช้งานครั้งแรก</li>
+        <li>เข้าสู่ระบบด้วยชื่อผู้ใช้และรหัสผ่าน</li>
+        <li>เขียนไดอารี่ แล้วกด “บันทึก”</li>
+        <li>ข้อมูลถูกเก็บไว้ในเครื่องของคุณเท่านั้น</li>
+        <li>ลืมรหัสผ่านสามารถตั้งใหม่ได้โดยข้อมูลไม่หาย</li>
+      </ol>
+      <button class="btn-secondary" onclick="closeHelp()">ปิด</button>
+    </div>
+  </div>
 
+  <!-- 🧠 SCRIPT -->
   <script>
     let currentUser = null;
 
-    // 🆕 สมัครผู้ใช้
+    function openHelp() {
+      document.getElementById("helpModal").style.display = "flex";
+    }
+
+    function closeHelp() {
+      document.getElementById("helpModal").style.display = "none";
+    }
+
     function register() {
       const u = username.value.trim();
       const p = password.value;
@@ -155,7 +142,7 @@
         return;
       }
 
-      users[u] = btoa(p); // 🔐 เข้ารหัส
+      users[u] = btoa(p);
       localStorage.setItem("users", JSON.stringify(users));
 
       alert("สมัครสำเร็จ 🎉");
@@ -163,7 +150,6 @@
       password.value = "";
     }
 
-    // 🔐 เข้าใช้งาน
     function login() {
       const u = username.value.trim();
       const p = password.value;
@@ -181,55 +167,39 @@
       showDiary();
     }
 
-    // 🔁 ลืมรหัสผ่าน (ไม่ลบข้อมูล)
     function forgotPassword() {
       const u = username.value.trim();
-
-      if (!u) {
-        alert("กรุณากรอกชื่อผู้ใช้ก่อน");
-        return;
-      }
+      if (!u) return alert("กรอกชื่อผู้ใช้ก่อน");
 
       const users = JSON.parse(localStorage.getItem("users") || "{}");
-
-      if (!users[u]) {
-        alert("ไม่พบผู้ใช้นี้");
-        return;
-      }
+      if (!users[u]) return alert("ไม่พบผู้ใช้นี้");
 
       const newPass = prompt("กรอกรหัสผ่านใหม่");
+      if (!newPass) return;
 
-      if (!newPass) {
-        alert("ยกเลิกการตั้งรหัสผ่าน");
-        return;
-      }
-
-      users[u] = btoa(newPass); // 🔐 เข้ารหัสเหมือน register
+      users[u] = btoa(newPass);
       localStorage.setItem("users", JSON.stringify(users));
-
-      alert("ตั้งรหัสผ่านใหม่เรียบร้อย ✅");
+      alert("ตั้งรหัสผ่านใหม่แล้ว ✅");
       password.value = "";
     }
 
-    // 🚪 ออกจากระบบ
     function logout() {
       currentUser = null;
       diaryApp.style.display = "none";
       loginBox.style.display = "block";
-      document.getElementById("list").innerHTML = "";
+      list.innerHTML = "";
     }
 
-    // 💾 บันทึกไดอารี่
     function saveDiary() {
       const text = document.getElementById("text").value.trim();
-      if (text === "") return;
+      if (!text) return;
 
       const key = "diary_" + currentUser;
       const diaries = JSON.parse(localStorage.getItem(key) || "[]");
 
       diaries.push({
         date: new Date().toLocaleString(),
-        text: text
+        text
       });
 
       localStorage.setItem(key, JSON.stringify(diaries));
@@ -237,31 +207,23 @@
       showDiary();
     }
 
-    // 📖 แสดงไดอารี่
     function showDiary() {
       const key = "diary_" + currentUser;
       const diaries = JSON.parse(localStorage.getItem(key) || "[]");
-      const list = document.getElementById("list");
       list.innerHTML = "";
 
       diaries.slice().reverse().forEach(d => {
         const div = document.createElement("div");
         div.className = "entry";
 
-        const dateDiv = document.createElement("div");
-        dateDiv.className = "date";
-        dateDiv.textContent = d.date;
-
-        const textDiv = document.createElement("div");
-        textDiv.textContent = d.text;
-
-        div.appendChild(dateDiv);
-        div.appendChild(textDiv);
+        div.innerHTML = `
+          <div class="date">${d.date}</div>
+          <div>${d.text}</div>
+        `;
         list.appendChild(div);
       });
     }
   </script>
 
 </body>
-
 </html>
